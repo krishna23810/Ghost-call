@@ -8,7 +8,7 @@ import DockButton from './DockButton';
 import CustomChatDrawer from './CustomChatDrawer';
 import CustomParticipantTile from './CustomParticipantTile';
 import DraggableSelfView from './DraggableSelfView';
-import { MicIcon, CamIcon, ScreenIcon, ChatBubbleIcon, PhoneOffIcon } from './Icons';
+import { MicIcon, CamIcon, ScreenIcon, ChatBubbleIcon, PhoneOffIcon, SpeakerIcon } from './Icons';
 
 function getGridClasses(count: number) {
   if (count <= 1) return 'grid-cols-1 w-full max-w-5xl mx-auto';
@@ -28,6 +28,7 @@ export default function CustomVideoConference({ onLeave }: CustomVideoConference
     useLocalParticipant();
 
   const [showChat, setShowChat] = useState(false);
+  const [isDeafened, setIsDeafened] = useState(false);
 
   const tracks = useTracks(
     [
@@ -62,6 +63,17 @@ export default function CustomVideoConference({ onLeave }: CustomVideoConference
     } catch {
       // ignore transient toggle errors
     }
+  }
+
+  function toggleDeafen() {
+    setIsDeafened((prev) => {
+      const next = !prev;
+      const audioElements = document.querySelectorAll('audio');
+      audioElements.forEach((el) => {
+        el.muted = next;
+      });
+      return next;
+    });
   }
 
   const hasRemote = remoteTracks.length > 0;
@@ -99,6 +111,13 @@ export default function CustomVideoConference({ onLeave }: CustomVideoConference
           onClick={toggleCam}
           icon={<CamIcon enabled={isCameraEnabled} />}
           label={isCameraEnabled ? 'Camera off' : 'Camera on'}
+        />
+
+        <DockButton
+          danger={isDeafened}
+          onClick={toggleDeafen}
+          icon={<SpeakerIcon enabled={!isDeafened} />}
+          label={isDeafened ? 'Sound off' : 'Sound on'}
         />
 
         <DockButton

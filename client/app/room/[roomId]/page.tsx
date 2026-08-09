@@ -1111,11 +1111,14 @@ const sizeClasses: Record<ViewSize, string> = {
 function DraggableSelfView({ trackRef }: { trackRef: TrackReference }) {
   const [position, setPosition] = useState({ x: 20, y: 88 });
   const [isDragging, setIsDragging] = useState(false);
-  const [viewSize, setViewSize] = useState<ViewSize>('md');
+  const [viewSize, setViewSize] = useState<ViewSize>('sm');
 
   const dragRef = useRef({ startX: 0, startY: 0, initialX: 20, initialY: 88 });
 
   function handlePointerDown(e: React.PointerEvent) {
+    if ((e.target as HTMLElement).closest('button')) {
+      return;
+    }
     e.stopPropagation();
     setIsDragging(true);
     dragRef.current = {
@@ -1161,9 +1164,8 @@ function DraggableSelfView({ trackRef }: { trackRef: TrackReference }) {
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
-      className={`group fixed z-50 select-none overflow-hidden rounded-2xl border border-indigo-500/80 bg-slate-950 shadow-2xl shadow-slate-900/60 transition-[width,height] duration-200 ${
-        isDragging ? 'cursor-grabbing' : 'cursor-grab'
-      } ${sizeClasses[viewSize]}`}
+      className={`group fixed z-50 select-none overflow-hidden rounded-2xl border border-indigo-500/80 bg-slate-950 shadow-2xl shadow-slate-900/60 transition-[width,height] duration-200 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'
+        } ${sizeClasses[viewSize]}`}
     >
       {/* Top Drag + Size Controls Bar */}
       <div className="absolute inset-x-2 top-2 z-30 flex items-center justify-between opacity-0 transition-opacity group-hover:opacity-100">
@@ -1172,7 +1174,10 @@ function DraggableSelfView({ trackRef }: { trackRef: TrackReference }) {
         </span>
 
         {/* Size Presets: S, M, L */}
-        <div className="flex items-center gap-1 rounded-full border border-white/15 bg-slate-900/85 px-1.5 py-0.5 backdrop-blur-md">
+        <div
+          onPointerDown={(e) => e.stopPropagation()}
+          className="flex items-center gap-1 rounded-full border border-white/15 bg-slate-900/85 px-1.5 py-0.5 backdrop-blur-md cursor-pointer"
+        >
           {(['sm', 'md', 'lg'] as ViewSize[]).map((sz) => (
             <button
               key={sz}
@@ -1181,11 +1186,10 @@ function DraggableSelfView({ trackRef }: { trackRef: TrackReference }) {
                 e.stopPropagation();
                 setViewSize(sz);
               }}
-              className={`flex h-4.5 w-4.5 items-center justify-center rounded-full text-[9px] font-extrabold uppercase transition-all ${
-                viewSize === sz
+              className={`flex h-4.5 w-4.5 items-center justify-center rounded-full text-[9px] font-extrabold uppercase transition-all ${viewSize === sz
                   ? 'bg-indigo-600 text-white shadow-xs'
                   : 'text-slate-300 hover:text-white hover:bg-white/20'
-              }`}
+                }`}
             >
               {sz[0]}
             </button>
@@ -1210,7 +1214,6 @@ function DraggableSelfView({ trackRef }: { trackRef: TrackReference }) {
       </div>
     </div>
   );
-}
 }
 
 function getGridClasses(count: number) {

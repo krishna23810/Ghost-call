@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+/* ── Pure Tailwind CSS Light Mode Setup ──────────────────────── */
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 min-h-screen antialiased overflow-x-hidden;
+  }
+}
+
+/* ── LiveKit Component Overrides (Pure Tailwind Theme) ───────── */
+[data-lk-theme="default"] {
+  --lk-bg: #f8fafc !important;
+  --lk-bg2: #ffffff !important;
+  --lk-control-bg: #ffffff !important;
+  --lk-accent: #4f46e5 !important;
+  --lk-border-color: #e2e8f0 !important;
+  --lk-border-radius: 20px !important;
+}
+
+/* Conference Container */
+.lk-video-conference {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative !important;
+  background: #f8fafc !important;
+  padding: 20px !important;
+  gap: 20px !important;
+}
+
+/* Video Grid Layout */
+.lk-grid-layout {
+  height: 100% !important;
+  max-height: calc(100vh - 140px) !important;
+  gap: 20px !important;
+}
+
+/* Video Participant Tile */
+.lk-participant-tile {
+  border-radius: 24px !important;
+  overflow: hidden !important;
+  border: 1px solid #e2e8f0 !important;
+  background: #0f172a !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  position: relative !important;
+}
+
+.lk-participant-tile:hover {
+  border-color: #cbd5e1 !important;
+}
+
+/* Active Speaker Ring */
+.lk-participant-tile[data-lk-speaking="true"] {
+  border: 2px solid #4f46e5 !important;
+  box-shadow: 0 0 30px rgba(79, 70, 229, 0.35) !important;
+}
+
+/* Camera Off Placeholder Styling */
+.lk-participant-placeholder svg,
+.lk-avatar-container svg {
+  display: none !important;
+}
+
+.lk-participant-placeholder {
+  background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+}
+
+.lk-participant-placeholder::after {
+  content: '👤';
+  font-size: 38px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(79, 70, 229, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Participant Name Tag */
+.lk-participant-metadata {
+  position: absolute !important;
+  bottom: 16px !important;
+  left: 16px !important;
+  right: auto !important;
+  width: auto !important;
+  max-width: calc(100% - 32px) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: 9999px !important;
+  padding: 6px 16px !important;
+  margin: 0 !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15) !important;
+}
+
+.lk-participant-name {
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  color: #0f172a !important;
+}
+
+/* Floating Bottom Control Dock */
+.lk-control-bar {
+  position: fixed !important;
+  bottom: 24px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 45 !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 9999px !important;
+  padding: 8px 18px !important;
+  gap: 10px !important;
+  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15), 0 0 20px rgba(79, 70, 229, 0.08) !important;
+  margin: 0 !important;
+}
+
+.lk-button {
+  border-radius: 9999px !important;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 8px 18px !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.lk-button:hover {
+  background: #EEF2FF !important;
+  border-color: #c7d2fe !important;
+  color: #4f46e5 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15) !important;
+}
+
+.lk-button[aria-pressed="false"] {
+  background: #fef2f2 !important;
+  color: #ef4444 !important;
+  border-color: #fecaca !important;
+}
+
+.lk-disconnect-button {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25) !important;
+}
+
+.lk-disconnect-button:hover {
+  background: #dc2626 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35) !important;
+}
+
+/* Chat Drawer */
+.lk-chat {
+  background: #ffffff !important;
+  border-left: 1px solid #e2e8f0 !important;
+  border-radius: 24px !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1) !important;
+}

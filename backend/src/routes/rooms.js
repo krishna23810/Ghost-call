@@ -64,7 +64,7 @@ router.get('/:roomId', async (req, res) => {
     const room = await getRoomById(req.params.roomId);
     if (!room) return res.status(404).json({ error: 'Room not found or expired' });
 
-    res.json({ exists: true, roomId: room.roomId });
+    res.json({ exists: true, roomId: room.roomId, code: room.code });
   } catch (err) {
     console.error('Get room error:', err);
     res.status(500).json({ error: 'Failed to get room' });

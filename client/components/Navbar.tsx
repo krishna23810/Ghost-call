@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import ROUTES from '@/routes';
 
 interface NavbarProps {
   roomId?: string;
@@ -43,7 +44,7 @@ export default function Navbar({ roomId, onInviteClick }: NavbarProps) {
       {/* Brand & Status */}
       <div className="flex items-center gap-3">
         <button
-          onClick={() => router.push('/')}
+          onClick={() => router.push(ROUTES.HOME)}
           className="flex items-center gap-2.5 group cursor-pointer"
         >
           <span className='bg-indigo-700 rounded-2xl'>

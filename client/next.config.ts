@@ -13,9 +13,21 @@ const nextConfig: NextConfig = {
     '127.0.0.1',
   ],
 
-  // Next.js API Proxy Rewrites for Mobile Tunneling
+  // Next.js API & Proxy Rewrites for Mobile & Reverse Proxy Tunneling
   async rewrites() {
     return [
+      {
+        source: '/ghostcall',
+        destination: '/',
+      },
+      {
+        source: '/ghostcall/room/:roomId*',
+        destination: '/room/:roomId*',
+      },
+      {
+        source: '/ghostcall/api/:path*',
+        destination: `${BACKEND_URL}/api/:path*`,
+      },
       {
         source: '/api/:path*',
         destination: `${BACKEND_URL}/api/:path*`,

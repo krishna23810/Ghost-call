@@ -3,13 +3,14 @@
  * Centralized route mapping for client-side navigation and backend API endpoints.
  */
 
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? '/ghostcall';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 export const ROUTES = {
   // Client Pages
-  HOME: '/',
+  HOME: BASE_PATH || '/',
   ROOM: (roomId: string, code?: string) =>
-    `/room/${roomId}${code ? `?code=${code}` : ''}`,
+    `${BASE_PATH}/room/${roomId}${code ? `?code=${code}` : ''}`,
 
   // Backend REST API Endpoints
   API: {

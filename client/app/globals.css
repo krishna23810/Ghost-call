@@ -1,173 +1,91 @@
 @import "tailwindcss";
 
-/* ── Pure Tailwind CSS Light Mode Setup ──────────────────────── */
-@layer base {
-  body {
-    @apply bg-slate-50 text-slate-900 min-h-screen antialiased overflow-x-hidden;
+/* ── Pure Tailwind CSS Component Layer for Third-Party LiveKit Overrides ── */
+@layer components {
+  /* Conference Layout */
+  .lk-video-conference {
+    @apply h-full flex flex-col relative bg-slate-50 p-5 gap-5;
   }
-}
 
-/* ── LiveKit Component Overrides (Pure Tailwind Theme) ───────── */
-[data-lk-theme="default"] {
-  --lk-bg: #f8fafc !important;
-  --lk-bg2: #ffffff !important;
-  --lk-control-bg: #ffffff !important;
-  --lk-accent: #4f46e5 !important;
-  --lk-border-color: #e2e8f0 !important;
-  --lk-border-radius: 20px !important;
-}
+  .lk-grid-layout {
+    @apply h-full max-h-[calc(100vh-140px)] gap-5;
+  }
 
-/* Conference Container */
-.lk-video-conference {
-  height: 100% !important;
-  display: flex !important;
-  flex-direction: column !important;
-  position: relative !important;
-  background: #f8fafc !important;
-  padding: 20px !important;
-  gap: 20px !important;
-}
+  /* Participant Video Tiles */
+  .lk-participant-tile {
+    @apply rounded-3xl overflow-hidden border border-slate-200 bg-slate-950 shadow-md transition-all duration-300 relative;
+  }
 
-/* Video Grid Layout */
-.lk-grid-layout {
-  height: 100% !important;
-  max-height: calc(100vh - 140px) !important;
-  gap: 20px !important;
-}
+  .lk-participant-tile:hover {
+    @apply border-slate-300;
+  }
 
-/* Video Participant Tile */
-.lk-participant-tile {
-  border-radius: 24px !important;
-  overflow: hidden !important;
-  border: 1px solid #e2e8f0 !important;
-  background: #0f172a !important;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1) !important;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  position: relative !important;
-}
+  .lk-participant-tile[data-lk-speaking="true"] {
+    @apply border-2 border-indigo-600 ring-4 ring-indigo-500/20 shadow-indigo-500/30;
+  }
 
-.lk-participant-tile:hover {
-  border-color: #cbd5e1 !important;
-}
+  /* Participant Placeholder */
+  .lk-participant-placeholder svg,
+  .lk-avatar-container svg {
+    display: none !important;
+  }
 
-/* Active Speaker Ring */
-.lk-participant-tile[data-lk-speaking="true"] {
-  border: 2px solid #4f46e5 !important;
-  box-shadow: 0 0 30px rgba(79, 70, 229, 0.35) !important;
-}
+  .lk-participant-placeholder {
+    @apply bg-slate-900 flex items-center justify-center relative;
+  }
 
-/* Camera Off Placeholder Styling */
-.lk-participant-placeholder svg,
-.lk-avatar-container svg {
-  display: none !important;
-}
+  /* Participant Name Pill Tag */
+  .lk-participant-metadata {
+    @apply absolute bottom-4 left-4 right-auto w-auto max-w-[calc(100%-2rem)] bg-white/95 backdrop-blur-md border border-slate-200/80 rounded-full px-4 py-1.5 m-0 shadow-md;
+  }
 
-.lk-participant-placeholder {
-  background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  position: relative !important;
-}
+  .lk-participant-name {
+    @apply font-bold text-xs text-slate-900 tracking-wide;
+  }
 
-.lk-participant-placeholder::after {
-  content: '👤';
-  font-size: 38px;
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 30px rgba(79, 70, 229, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-}
+  /* Floating Bottom Control Dock */
+  .lk-control-bar {
+    @apply fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-white/95 backdrop-blur-2xl border border-slate-200 rounded-full px-4 py-2 gap-2.5 shadow-2xl shadow-slate-900/15 m-0;
+  }
 
-/* Participant Name Tag */
-.lk-participant-metadata {
-  position: absolute !important;
-  bottom: 16px !important;
-  left: 16px !important;
-  right: auto !important;
-  width: auto !important;
-  max-width: calc(100% - 32px) !important;
-  background: rgba(255, 255, 255, 0.95) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  border: 1px solid rgba(226, 232, 240, 0.8) !important;
-  border-radius: 9999px !important;
-  padding: 6px 16px !important;
-  margin: 0 !important;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15) !important;
-}
+  .lk-button {
+    @apply rounded-full bg-slate-50 border border-slate-200 text-slate-900 text-xs font-semibold px-4 py-2 transition-all duration-200 hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-600 hover:-translate-y-0.5;
+  }
 
-.lk-participant-name {
-  font-weight: 700 !important;
-  font-size: 13px !important;
-  color: #0f172a !important;
-}
+  .lk-button[aria-pressed="false"] {
+    @apply bg-red-50 text-red-600 border-red-200;
+  }
 
-/* Floating Bottom Control Dock */
-.lk-control-bar {
-  position: fixed !important;
-  bottom: 24px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  z-index: 45 !important;
-  background: rgba(255, 255, 255, 0.95) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 9999px !important;
-  padding: 8px 18px !important;
-  gap: 10px !important;
-  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.15), 0 0 20px rgba(79, 70, 229, 0.08) !important;
-  margin: 0 !important;
-}
+  .lk-disconnect-button {
+    @apply bg-red-600 text-white border-none shadow-md shadow-red-500/20 hover:bg-red-700 hover:-translate-y-0.5;
+  }
 
-.lk-button {
-  border-radius: 9999px !important;
-  background: #f8fafc !important;
-  border: 1px solid #e2e8f0 !important;
-  color: #0f172a !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  padding: 8px 18px !important;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
+  /* ── Floating Right Slide-In Chat Drawer (Pure Tailwind @apply) ────────── */
+  .lk-chat {
+    @apply fixed right-6 top-20 bottom-28 w-88 max-w-[calc(100vw-3rem)] z-50 bg-white/98 backdrop-blur-2xl border border-slate-200 rounded-3xl shadow-2xl shadow-slate-900/20 flex flex-col overflow-hidden transition-all duration-300;
+  }
 
-.lk-button:hover {
-  background: #EEF2FF !important;
-  border-color: #c7d2fe !important;
-  color: #4f46e5 !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15) !important;
-}
+  .lk-chat-header {
+    @apply bg-slate-50 border-b border-slate-200 px-5 py-4 text-slate-900 font-bold text-sm flex items-center justify-between;
+  }
 
-.lk-button[aria-pressed="false"] {
-  background: #fef2f2 !important;
-  color: #ef4444 !important;
-  border-color: #fecaca !important;
-}
+  .lk-chat-messages {
+    @apply p-4 gap-3 overflow-y-auto bg-slate-50 flex-grow flex flex-col;
+  }
 
-.lk-disconnect-button {
-  background: #ef4444 !important;
-  color: #ffffff !important;
-  border: none !important;
-  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25) !important;
-}
+  .lk-chat-entry {
+    @apply bg-white border border-slate-200 rounded-2xl p-3 text-slate-900 text-xs shadow-xs;
+  }
 
-.lk-disconnect-button:hover {
-  background: #dc2626 !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35) !important;
-}
+  .lk-chat-form {
+    @apply border-t border-slate-200 p-3.5 bg-white flex gap-2;
+  }
 
-/* Chat Drawer */
-.lk-chat {
-  background: #ffffff !important;
-  border-left: 1px solid #e2e8f0 !important;
-  border-radius: 24px !important;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1) !important;
+  .lk-chat-form-input {
+    @apply bg-slate-50 border border-slate-200 rounded-xl text-slate-900 px-3.5 py-2 text-xs outline-none focus:border-indigo-600 focus:bg-white flex-grow transition-all;
+  }
+
+  .lk-chat-form-button {
+    @apply bg-indigo-600 text-white rounded-xl px-4 py-2 font-bold text-xs hover:bg-indigo-700 shadow-md shadow-indigo-500/20 transition-all cursor-pointer;
+  }
 }

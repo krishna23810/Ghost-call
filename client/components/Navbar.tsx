@@ -66,10 +66,6 @@ export default function Navbar({ roomId, onInviteClick }: NavbarProps) {
               </span>
               LIVE
             </span>
-
-            <span className="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-semibold bg-indigo-50/80 text-indigo-700 border border-indigo-200/80">
-              🔒 256-BIT ENCRYPTED
-            </span>
           </div>
         )}
       </div>

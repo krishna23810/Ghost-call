@@ -1099,11 +1099,19 @@ function DockButton({
   );
 }
 
+type ViewSize = 'sm' | 'md' | 'lg';
+
+const sizeClasses: Record<ViewSize, string> = {
+  sm: 'h-24 w-36 sm:h-28 sm:w-44',
+  md: 'h-32 w-48 sm:h-40 sm:w-60',
+  lg: 'h-44 w-64 sm:h-56 sm:w-80',
+};
+
 // ── Floating Draggable Self-View (Picture-in-Picture) ─────────────
 function DraggableSelfView({ trackRef }: { trackRef: TrackReference }) {
   const [position, setPosition] = useState({ x: 20, y: 88 });
   const [isDragging, setIsDragging] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [viewSize, setViewSize] = useState<ViewSize>('md');
 
   const dragRef = useRef({ startX: 0, startY: 0, initialX: 20, initialY: 88 });
 
@@ -1126,8 +1134,8 @@ function DraggableSelfView({ trackRef }: { trackRef: TrackReference }) {
     const dy = e.clientY - dragRef.current.startY;
 
     setPosition({
-      x: Math.max(10, Math.min(window.innerWidth - 240, dragRef.current.initialX + dx)),
-      y: Math.max(70, Math.min(window.innerHeight - 200, dragRef.current.initialY + dy)),
+      x: Math.max(10, Math.min(window.innerWidth - 200, dragRef.current.initialX + dx)),
+      y: Math.max(70, Math.min(window.innerHeight - 150, dragRef.current.initialY + dy)),
     });
   }
 
@@ -1153,55 +1161,56 @@ function DraggableSelfView({ trackRef }: { trackRef: TrackReference }) {
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
-      className={`group fixed z-50 select-none overflow-hidden border border-slate-700/60 bg-slate-950 shadow-2xl shadow-slate-900/40 transition-[width,height] duration-200 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'
-        } ${isMinimized ? 'h-14 w-14 rounded-full' : 'h-32 w-44 rounded-2xl sm:h-40 sm:w-56'}`}
+      className={`group fixed z-50 select-none overflow-hidden rounded-2xl border border-indigo-500/80 bg-slate-950 shadow-2xl shadow-slate-900/60 transition-[width,height] duration-200 ${
+        isDragging ? 'cursor-grabbing' : 'cursor-grab'
+      } ${sizeClasses[viewSize]}`}
     >
-      {/* Drag handle + minimize control */}
-      <div className="absolute inset-x-1.5 top-1.5 z-30 flex items-center justify-between opacity-0 transition-opacity group-hover:opacity-100">
-        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-900/70 text-white/70 backdrop-blur-sm">
+      {/* Top Drag + Size Controls Bar */}
+      <div className="absolute inset-x-2 top-2 z-30 flex items-center justify-between opacity-0 transition-opacity group-hover:opacity-100">
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-900/80 text-white/80 backdrop-blur-md border border-white/10">
           <MoveIcon />
         </span>
 
-        {/* <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsMinimized((prev) => !prev);
-          }}
-          className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-900/70 text-white/80 backdrop-blur-sm transition-colors hover:bg-slate-800 hover:text-white"
-          aria-label={isMinimized ? 'Expand self view' : 'Minimize self view'}
-        >
-          {isMinimized ? <ExpandIcon /> : <MinimizeIcon />}
-        </button> */}
+        {/* Size Presets: S, M, L */}
+        <div className="flex items-center gap-1 rounded-full border border-white/15 bg-slate-900/85 px-1.5 py-0.5 backdrop-blur-md">
+          {(['sm', 'md', 'lg'] as ViewSize[]).map((sz) => (
+            <button
+              key={sz}
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setViewSize(sz);
+              }}
+              className={`flex h-4.5 w-4.5 items-center justify-center rounded-full text-[9px] font-extrabold uppercase transition-all ${
+                viewSize === sz
+                  ? 'bg-indigo-600 text-white shadow-xs'
+                  : 'text-slate-300 hover:text-white hover:bg-white/20'
+              }`}
+            >
+              {sz[0]}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {!isMinimized && (
-        <>
-          {!isCameraOff ? (
-            <VideoTrack trackRef={trackRef} className="h-full w-full bg-slate-950 object-contain" />
-          ) : (
-            <div className="relative flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/15 bg-white/10 text-white">
-                <GhostIcon className="h-4.5 w-4.5" />
-              </div>
-              <p className="mt-1.5 text-[10px] font-medium text-slate-400">Camera off</p>
-            </div>
-          )}
-
-          <div className="absolute bottom-1.5 left-1.5 z-20 flex max-w-[calc(100%-0.75rem)] items-center gap-1.5 rounded-full border border-white/15 bg-slate-900/80 px-2 py-1 text-[10px] font-bold text-white backdrop-blur-sm">
-            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
-            <span className="truncate">{displayName} (You)</span>
+      {!isCameraOff ? (
+        <VideoTrack trackRef={trackRef} className="h-full w-full bg-slate-950 object-contain" />
+      ) : (
+        <div className="relative flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/15 bg-white/10 text-white">
+            <GhostIcon className="h-4.5 w-4.5" />
           </div>
-        </>
-      )}
-
-      {isMinimized && (
-        <div className="flex h-full w-full items-center justify-center text-white">
-          <GhostIcon className="h-5 w-5" />
+          <p className="mt-1.5 text-[10px] font-medium text-slate-400">Camera off</p>
         </div>
       )}
+
+      <div className="absolute bottom-1.5 left-1.5 z-20 flex max-w-[calc(100%-0.75rem)] items-center gap-1.5 rounded-full border border-white/15 bg-slate-900/80 px-2 py-1 text-[10px] font-bold text-white backdrop-blur-sm">
+        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
+        <span className="truncate">{displayName} (You)</span>
+      </div>
     </div>
   );
+}
 }
 
 function getGridClasses(count: number) {

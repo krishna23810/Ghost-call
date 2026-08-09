@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { useLocalParticipant, useTracks } from '@livekit/components-react';
-import { Track } from 'livekit-client';
+import { useState, useEffect } from 'react';
+import { useLocalParticipant, useTracks, useRoomContext } from '@livekit/components-react';
+import { Track, RoomEvent } from 'livekit-client';
 
 import DockButton from './DockButton';
 import CustomChatDrawer from './CustomChatDrawer';
@@ -24,11 +24,40 @@ interface CustomVideoConferenceProps {
 }
 
 export default function CustomVideoConference({ onLeave }: CustomVideoConferenceProps) {
+  const room = useRoomContext();
   const { isMicrophoneEnabled, isCameraEnabled, isScreenShareEnabled, localParticipant } =
     useLocalParticipant();
 
   const [showChat, setShowChat] = useState(false);
   const [isDeafened, setIsDeafened] = useState(false);
+
+  useEffect(() => {
+    function applyAudioState() {
+      if (room) {
+        room.remoteParticipants.forEach((participant) => {
+          participant.audioTrackPublications.forEach((pub) => {
+            if (pub.track && typeof (pub.track as any).setVolume === 'function') {
+              (pub.track as any).setVolume(isDeafened ? 0 : 1);
+            }
+          });
+        });
+      }
+
+      document.querySelectorAll('audio').forEach((el) => {
+        el.muted = isDeafened;
+        el.volume = isDeafened ? 0 : 1;
+      });
+    }
+
+    applyAudioState();
+
+    if (room) {
+      room.on(RoomEvent.TrackSubscribed, applyAudioState);
+      return () => {
+        room.off(RoomEvent.TrackSubscribed, applyAudioState);
+      };
+    }
+  }, [isDeafened, room]);
 
   const tracks = useTracks(
     [
@@ -66,14 +95,7 @@ export default function CustomVideoConference({ onLeave }: CustomVideoConference
   }
 
   function toggleDeafen() {
-    setIsDeafened((prev) => {
-      const next = !prev;
-      const audioElements = document.querySelectorAll('audio');
-      audioElements.forEach((el) => {
-        el.muted = next;
-      });
-      return next;
-    });
+    setIsDeafened((prev) => !prev);
   }
 
   const hasRemote = remoteTracks.length > 0;

@@ -102,7 +102,7 @@ export default function CustomVideoConference({ onLeave }: CustomVideoConference
   const mainTracks = hasRemote ? remoteTracks : tracks;
 
   return (
-    <div className="relative flex h-[calc(100dvh-4.5rem)] w-full flex-col overflow-hidden bg-[#f1f3f9] p-3 pb-16">
+    <div className="relative flex h-[calc(100dvh-5rem)] w-full flex-col overflow-hidden bg-[#f1f3f9] p-3 pb-16">
       {/* Main Screen Video Grid */}
       <div className={`grid h-full w-full min-h-0 flex-1 auto-rows-fr ${getGridClasses(mainTracks.length)} gap-3 sm:gap-4`}>
         {mainTracks.map((trackRef) => (

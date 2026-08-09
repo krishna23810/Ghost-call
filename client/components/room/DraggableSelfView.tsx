@@ -112,8 +112,6 @@ export default function DraggableSelfView({ trackRef }: DraggableSelfViewProps) 
 
   if (isCameraOff) return null;
 
-  const displayName = trackRef.participant?.name || trackRef.participant?.identity || 'You';
-
   return (
     <div
       style={{ right: `${position.x}px`, top: `${position.y}px` }}
@@ -182,11 +180,6 @@ export default function DraggableSelfView({ trackRef }: DraggableSelfViewProps) 
           <p className="mt-1.5 text-[10px] font-medium text-slate-400">Camera off</p>
         </div>
       )}
-
-      <div className="absolute bottom-1.5 left-1.5 z-20 flex max-w-[calc(100%-0.75rem)] items-center gap-1.5 rounded-full border border-white/15 bg-slate-900/80 px-2 py-1 text-[10px] font-bold text-white backdrop-blur-sm">
-        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
-        <span className="truncate">{displayName} (You)</span>
-      </div>
     </div>
   );
 }

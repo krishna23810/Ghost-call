@@ -16,6 +16,13 @@
     @apply rounded-3xl overflow-hidden border border-slate-200 bg-slate-950 shadow-md transition-all duration-300 relative;
   }
 
+  /* Prevent automatic video cropping/zoom (fit whole camera stream) */
+  .lk-participant-tile video,
+  .lk-video-container video,
+  .lk-video-conference video {
+    @apply object-contain w-full h-full bg-slate-950 !important;
+  }
+
   .lk-participant-tile:hover {
     @apply border-slate-300;
   }

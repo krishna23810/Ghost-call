@@ -20,7 +20,7 @@
   .lk-participant-tile video,
   .lk-video-container video,
   .lk-video-conference video {
-    @apply object-contain w-full h-full bg-slate-950 !important;
+    @apply !object-contain !w-full !h-full !bg-slate-950;
   }
 
   .lk-participant-tile:hover {

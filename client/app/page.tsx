@@ -176,7 +176,7 @@ export default function LandingPage() {
               </h1>
 
               <p className="text-[11px] text-slate-500 sm:text-xs">
-                Private video calling
+                Private video calling · A product of KKTechSolution by Krishna
               </p>
             </div>
           </div>
@@ -404,8 +404,11 @@ export default function LandingPage() {
         </section>
 
         {/* Footer */}
-        <footer className="border-t border-slate-200/70 py-3 text-center text-[11px] text-slate-400 sm:text-xs">
-          Ghost Call Platform · Secure web communications
+        <footer className="flex flex-col items-center justify-center gap-1 border-t border-slate-200/70 py-4 text-center text-[11px] text-slate-400 sm:text-xs">
+          <div>Ghost Call Platform · Secure web communications</div>
+          <div className="font-medium text-slate-500">
+            A product of KKTechSolution by Krishna
+          </div>
         </footer>
       </div>
     </main>

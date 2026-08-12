@@ -1,5 +1,6 @@
 # 👻 Ghost Call — Anonymous & Private Video Calling Platform
 
+> **A product of KKTechSolution by Krishna**  
 > High-performance, zero-registration, browser-based video calls with 6-digit room join codes and 24-hour key expiration.
 
 ---
@@ -96,6 +97,14 @@ Open **`http://localhost:3000`** in your browser!
 
 ---
 
+## 👤 Author & Credits
+
+- **Product**: KKTechSolution
+- **Created by**: Krishna ([@krishna23810](https://github.com/krishna23810))
+
+---
+
 ## 📄 License
 
-MIT License. Built for privacy and open-source communication.
+MIT License. Built for privacy and open-source communication by KKTechSolution.
+

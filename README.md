@@ -17,45 +17,45 @@ Ghost Call is designed as an ephemeral, privacy-first distributed video communic
 
 ```mermaid
 graph TD
-    subgraph Clients["Client Layer (Web Browsers)"]
+    subgraph Clients["Client Layer"]
         Host["Host User (Browser)"]
         Guest["Guest User (Browser)"]
     end
 
-    subgraph Frontend["Frontend Layer (Next.js 14 App Router)"]
-        Landing["Landing Page (app/page.tsx)"]
-        RoomUI["Room Component (app/room/[roomId])"]
-        LKReact["LiveKit Components React"]
+    subgraph Frontend["Frontend Layer (Next.js 14)"]
+        Landing["Landing Page"]
+        RoomUI["Room Component"]
+        LKReact["LiveKit React SDK"]
     end
 
-    subgraph Backend["Signaling & Control Layer (Node.js / Express)"]
+    subgraph Backend["Backend Layer (Express)"]
         API["Express API Server"]
         RoomService["Room Service"]
-        TokenService["LiveKit Token Minting"]
-        Middleware["Security & Rate Limiter"]
+        TokenService["LiveKit Token Service"]
+        Middleware["Security Middleware"]
     end
 
-    subgraph Storage["Ephemeral State Layer (Upstash Redis)"]
-        Redis[("Upstash Redis (24h TTL)")]
+    subgraph Storage["Ephemeral Storage"]
+        Redis[("Upstash Redis - 24h TTL")]
     end
 
-    subgraph SFU["Media Layer (LiveKit Cloud SFU)"]
-        LiveKit["LiveKit SFU Server (WebRTC)"]
+    subgraph SFU["Media Layer"]
+        LiveKit["LiveKit SFU (WebRTC)"]
     end
 
-    Host -->|HTTPS / Next.js| Landing
-    Guest -->|HTTPS / Next.js| Landing
-    Landing -->|Create Room / Resolve Code| API
-    RoomUI -->|Request Token| API
+    Host -->|"HTTPS / Next.js"| Landing
+    Guest -->|"HTTPS / Next.js"| Landing
+    Landing -->|"Create Room / Code Lookup"| API
+    RoomUI -->|"Request Token"| API
 
     API --> Middleware
     Middleware --> RoomService
     Middleware --> TokenService
 
-    RoomService -->|GET / SET / DEL (24h TTL)| Redis
-    TokenService -->|Mint Scoped JWT (4h)| RoomUI
+    RoomService -->|"GET, SET, DEL (24h TTL)"| Redis
+    TokenService -->|"Mint JWT Token (4h)"| RoomUI
 
-    LKReact -->|WebRTC Media Streams (DTLS-SRTP)| LiveKit
+    LKReact -->|"WebRTC Streams (DTLS-SRTP)"| LiveKit
 ```
 
 ---
@@ -75,30 +75,30 @@ sequenceDiagram
     participant LiveKit as LiveKit Cloud SFU
 
     Note over Host, LiveKit: Room Creation Phase
-    Host->>Client: Clicks "Start Anonymous Call"
+    Host->>Client: Clicks Start Anonymous Call
     Client->>API: POST /api/rooms
     API->>API: Generate 12-char RoomID & 6-digit Code
-    API->>Redis: SET room:{roomId} & SET code:{code} (TTL 24h)
+    API->>Redis: SET room key and code key with 24h TTL
     Redis-->>API: OK
-    API-->>Client: Returns { roomId, code, joinLink }
-    Client->>Host: Redirects to /room/[roomId]?code=123456
+    API-->>Client: Returns roomId, code and joinLink
+    Client->>Host: Redirects to /room/ROOM_ID?code=CODE
 
     Note over Guest, LiveKit: Join via Code Phase
     Guest->>Client: Enters 6-digit code on Home Page
     Client->>API: GET /api/rooms/code/:code
-    API->>Redis: GET code:{code}
+    API->>Redis: GET code mapping
     Redis-->>API: Returns roomId
-    API-->>Client: Returns { roomId }
-    Client->>Guest: Redirects to /room/[roomId]
+    API-->>Client: Returns roomId
+    Client->>Guest: Redirects to /room/ROOM_ID
 
     Note over Host, LiveKit: WebRTC Connection Phase
     Client->>API: POST /api/rooms/:roomId/token
-    API->>Redis: GET room:{roomId}
+    API->>Redis: GET room data
     Redis-->>API: Room Metadata
-    API->>API: Mint LiveKit AccessToken JWT (Identity: anon-xxx, Name: "Swift Fox")
-    API-->>Client: Returns { token, livekitUrl }
-    Client->>LiveKit: Connect via WebRTC (LiveKitRoom SDK)
-    LiveKit-->>Client: Audio/Video Stream Connected
+    API->>API: Mint LiveKit AccessToken JWT with random name
+    API-->>Client: Returns JWT token and livekitUrl
+    Client->>LiveKit: Connect via WebRTC SDK
+    LiveKit-->>Client: Audio and Video Streams Connected
 ```
 
 ---

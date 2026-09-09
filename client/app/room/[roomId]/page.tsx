@@ -118,8 +118,13 @@ export default function RoomPage() {
             video={false}
             audio
             onDisconnected={() => setState('ended')}
-            onError={() => {
-              setError('The connection was interrupted. Please rejoin the room.');
+            onError={(err) => {
+              console.error('LiveKit connection error:', err);
+              setError(
+                err?.message
+                  ? `LiveKit Connection Error: ${err.message}`
+                  : 'The connection to the video server was interrupted. Please check LiveKit configuration.'
+              );
               setState('error');
             }}
             style={{ height: '100%' }}

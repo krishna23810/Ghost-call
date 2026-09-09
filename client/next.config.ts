@@ -1,33 +1,23 @@
 import type { NextConfig } from "next";
 
 const BACKEND_URL = process.env.BACKEND_INTERNAL_URL || "http://localhost:4000";
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "/Ghost-call";
 
 const nextConfig: NextConfig = {
-  // 🚀 THIS FIXES MOBILE STYLING 100%: Tells Next.js to load CSS/JS directly from ghost-call deployment
-  assetPrefix: process.env.NODE_ENV === 'production' ? 'https://ghost-call-theta.vercel.app' : undefined,
+  // Set basePath for serving under kktechsolution.app/Ghost-call
+  basePath: BASE_PATH,
 
-  // Allow external local tunnels (localtunnel, mobile IP) in development
+  // Allow external reverse proxies and local dev origins
   allowedDevOrigins: [
     '*.loca.lt',
     'localhost:3000',
     '127.0.0.1',
+    'kktechsolution.app',
   ],
 
-  // Next.js API & Proxy Rewrites for Mobile & Reverse Proxy Tunneling
+  // Proxy API requests to Express backend
   async rewrites() {
     return [
-      {
-        source: '/ghostcall',
-        destination: '/',
-      },
-      {
-        source: '/ghostcall/room/:roomId*',
-        destination: '/room/:roomId*',
-      },
-      {
-        source: '/ghostcall/api/:path*',
-        destination: `${BACKEND_URL}/api/:path*`,
-      },
       {
         source: '/api/:path*',
         destination: `${BACKEND_URL}/api/:path*`,

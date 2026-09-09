@@ -114,16 +114,23 @@ export default function RoomPage() {
           <LiveKitRoom
             token={tokenData.token}
             serverUrl={tokenData.livekitUrl}
-            connect
+            connect={true}
             video={false}
-            audio
+            audio={false}
             onDisconnected={() => setState('ended')}
             onError={(err) => {
               console.error('LiveKit connection error:', err);
+              // Ignore normal client-side disconnect/navigation events
+              if (
+                err?.message?.includes('Client initiated disconnect') ||
+                err?.message?.includes('aborted')
+              ) {
+                return;
+              }
               setError(
                 err?.message
                   ? `LiveKit Connection Error: ${err.message}`
-                  : 'The connection to the video server was interrupted. Please check LiveKit configuration.'
+                  : 'The connection to the video server was interrupted.'
               );
               setState('error');
             }}

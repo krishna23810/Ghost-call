@@ -7,9 +7,13 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? '/Ghost-call';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || BASE_PATH;
 
 export const ROUTES = {
-  // Client Pages
-  HOME: BASE_PATH || '/',
+  // Client Navigation Pages (Next.js router automatically prepends basePath)
+  HOME: '/',
   ROOM: (roomId: string, code?: string) =>
+    `/room/${roomId}${code ? `?code=${code}` : ''}`,
+
+  // Full Path for Share Links (includes basePath for external URL sharing)
+  SHARE_ROOM: (roomId: string, code?: string) =>
     `${BASE_PATH}/room/${roomId}${code ? `?code=${code}` : ''}`,
 
   // Backend REST API Endpoints

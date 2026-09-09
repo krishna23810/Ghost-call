@@ -35,7 +35,7 @@ export default function RoomPage() {
   const hasFetchedRef = useRef(false);
 
   const joinLink =
-    typeof window !== 'undefined' ? `${window.location.origin}${ROUTES.ROOM(roomId)}` : '';
+    typeof window !== 'undefined' ? `${window.location.origin}${ROUTES.SHARE_ROOM(roomId)}` : '';
 
   const fetchToken = useCallback(async () => {
     if (hasFetchedRef.current) return;

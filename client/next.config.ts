@@ -15,6 +15,18 @@ const nextConfig: NextConfig = {
     'kktechsolution.app',
   ],
 
+  // Redirect root / to /Ghost-call automatically
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: BASE_PATH,
+        basePath: false,
+        permanent: false,
+      },
+    ];
+  },
+
   // Proxy API requests to Express backend
   async rewrites() {
     return [

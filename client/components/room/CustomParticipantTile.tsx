@@ -25,7 +25,7 @@ export default function CustomParticipantTile({ trackRef }: CustomParticipantTil
       {!isCameraOff ? (
         <VideoTrack
           trackRef={trackRef}
-          style={{ objectFit: 'contain' }}
+          style={{ objectFit: 'cover' }}
           className="h-full w-full bg-slate-950"
         />
       ) : (

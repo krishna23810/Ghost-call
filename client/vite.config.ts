@@ -50,7 +50,12 @@ export default defineConfig({
       '/Ghost-call/api': {
         target: 'http://localhost:4000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/Ghost-call/, ''),
+        rewrite: (path) => path.replace(/^\/[Gg]host-call/, ''),
+      },
+      '/ghost-call/api': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/[Gg]host-call/, ''),
       },
       '/api': {
         target: 'http://localhost:4000',
@@ -66,7 +71,12 @@ export default defineConfig({
       '/Ghost-call/api': {
         target: 'http://localhost:4000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/Ghost-call/, ''),
+        rewrite: (path) => path.replace(/^\/[Gg]host-call/, ''),
+      },
+      '/ghost-call/api': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/[Gg]host-call/, ''),
       },
       '/api': {
         target: 'http://localhost:4000',

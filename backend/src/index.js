@@ -49,10 +49,17 @@ const limiter = rateLimit({
 });
 
 app.use('/api', limiter);
+app.use('/Ghost-call/api', limiter);
+app.use('/ghost-call/api', limiter);
 
 // ── Routes ───────────────────────────────────────────────────
 app.use('/api/rooms', roomRoutes);
+app.use('/Ghost-call/api/rooms', roomRoutes);
+app.use('/ghost-call/api/rooms', roomRoutes);
+
 app.use('/api/admin', adminRoutes);
+app.use('/Ghost-call/api/admin', adminRoutes);
+app.use('/ghost-call/api/admin', adminRoutes);
 
 // ── Health check ─────────────────────────────────────────────
 app.get('/health', (req, res) => {

@@ -41,10 +41,15 @@ export default function AdminLoginPage() {
         navigate(ROUTES.ADMIN_DATA, { state: { adminKey: cleanKey }, replace: true });
       } else {
         const data = await res.json().catch(() => ({}));
-        setAuthError(data.error || 'Incorrect admin passcode');
+        if (res.status === 401) {
+          setAuthError(data.error || 'Incorrect admin passcode');
+        } else {
+          setAuthError(`Server error (${res.status}): ${data.error || 'Unable to reach admin API. Please check backend.'}`);
+        }
       }
-    } catch {
-      setAuthError('Failed to connect to backend server');
+    } catch (err) {
+      console.error('Admin login connection error:', err);
+      setAuthError('Failed to connect to backend server. Please verify backend is running.');
     } finally {
       setIsVerifying(false);
     }

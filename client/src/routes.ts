@@ -4,9 +4,10 @@
  */
 
 const isBrowser = typeof window !== 'undefined';
-const API_BASE = isBrowser && window.location.pathname.startsWith('/Ghost-call')
-  ? '/Ghost-call/api'
-  : '/api';
+const pathPrefix = isBrowser && /^\/ghost-call/i.test(window.location.pathname)
+  ? (window.location.pathname.match(/^\/[^/]+/)?.[0] || '/Ghost-call')
+  : '';
+const API_BASE = `${pathPrefix}/api`;
 
 export const ROUTES = {
   // Client Pages

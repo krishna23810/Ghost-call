@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Spinner from '@/components/Spinner';
 import ROUTES from '@/routes';
@@ -84,11 +84,87 @@ function BrowserIcon() {
 export default function LandingPage() {
   const router = useRouter();
 
-  const [code, setCode] = useState('');
+  const [codeDigits, setCodeDigits] = useState<string[]>(['', '', '', '', '', '']);
+  const code = codeDigits.join('');
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
   const [loading, setLoading] = useState(false);
   const [joining, setJoining] = useState(false);
   const [error, setError] = useState('');
   const [showJoin, setShowJoin] = useState(false);
+
+  function handleDigitChange(index: number, val: string) {
+    const raw = val.replace(/\D/g, '');
+    if (!raw) {
+      const next = [...codeDigits];
+      next[index] = '';
+      setCodeDigits(next);
+      setError('');
+      return;
+    }
+
+    if (raw.length > 1) {
+      const digitsArr = raw.slice(0, 6).split('');
+      const next = [...codeDigits];
+      digitsArr.forEach((char, i) => {
+        if (index + i < 6) {
+          next[index + i] = char;
+        }
+      });
+      setCodeDigits(next);
+      setError('');
+      const nextIdx = Math.min(index + digitsArr.length, 5);
+      inputRefs.current[nextIdx]?.focus();
+      return;
+    }
+
+    const next = [...codeDigits];
+    next[index] = raw;
+    setCodeDigits(next);
+    setError('');
+
+    if (index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  }
+
+  function handleKeyDown(index: number, e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Backspace') {
+      if (!codeDigits[index] && index > 0) {
+        e.preventDefault();
+        const next = [...codeDigits];
+        next[index - 1] = '';
+        setCodeDigits(next);
+        inputRefs.current[index - 1]?.focus();
+      } else if (codeDigits[index]) {
+        e.preventDefault();
+        const next = [...codeDigits];
+        next[index] = '';
+        setCodeDigits(next);
+      }
+    } else if (e.key === 'ArrowLeft' && index > 0) {
+      e.preventDefault();
+      inputRefs.current[index - 1]?.focus();
+    } else if (e.key === 'ArrowRight' && index < 5) {
+      e.preventDefault();
+      inputRefs.current[index + 1]?.focus();
+    }
+  }
+
+  function handlePaste(e: React.ClipboardEvent<HTMLInputElement>) {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+    if (!pasted) return;
+
+    const next = ['', '', '', '', '', ''];
+    pasted.split('').forEach((char, i) => {
+      if (i < 6) next[i] = char;
+    });
+    setCodeDigits(next);
+    setError('');
+    const focusIdx = Math.min(pasted.length, 5);
+    inputRefs.current[focusIdx]?.focus();
+  }
 
   async function handleStartCall() {
     setLoading(true);
@@ -146,11 +222,14 @@ export default function LandingPage() {
   function openJoinForm() {
     setShowJoin(true);
     setError('');
+    setTimeout(() => {
+      inputRefs.current[0]?.focus();
+    }, 50);
   }
 
   function resetJoinForm() {
     setShowJoin(false);
-    setCode('');
+    setCodeDigits(['', '', '', '', '', '']);
     setError('');
   }
 
@@ -310,35 +389,41 @@ export default function LandingPage() {
 
                       <div className="pt-1">
                         <label
-                          htmlFor="join-code-input"
-                          className="mb-2 block text-left text-xs font-semibold uppercase tracking-wider text-slate-500"
+                          htmlFor="join-code-input-0"
+                          className="mb-2.5 block text-left text-xs font-semibold uppercase tracking-wider text-slate-500"
                         >
                           6-digit call code
                         </label>
 
-                        <input
-                          id="join-code-input"
-                          type="text"
-                          inputMode="numeric"
-                          autoComplete="one-time-code"
-                          autoFocus
-                          maxLength={6}
-                          placeholder="748291"
-                          value={code}
-                          onChange={(e) => {
-                            setCode(
-                              e.target.value
-                                .replace(/\D/g, '')
-                                .slice(0, 6),
-                            );
-                            setError('');
-                          }}
-                          className="min-h-16 w-full rounded-2xl border border-slate-200 bg-white px-3 text-center font-mono text-2xl font-semibold tracking-[0.24em] text-slate-950 outline-none transition placeholder:text-base placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 sm:text-3xl"
-                          aria-invalid={Boolean(error)}
-                          aria-describedby={error ? 'join-error' : undefined}
-                        />
+                        <div className="grid grid-cols-6 gap-2 sm:gap-2.5">
+                          {codeDigits.map((digit, index) => (
+                            <input
+                              key={index}
+                              ref={(el) => {
+                                inputRefs.current[index] = el;
+                              }}
+                              id={`join-code-input-${index}`}
+                              type="text"
+                              inputMode="numeric"
+                              pattern="[0-9]*"
+                              maxLength={1}
+                              autoComplete={index === 0 ? 'one-time-code' : 'off'}
+                              value={digit}
+                              onChange={(e) => handleDigitChange(index, e.target.value)}
+                              onKeyDown={(e) => handleKeyDown(index, e)}
+                              onPaste={handlePaste}
+                              onFocus={(e) => e.target.select()}
+                              className={`h-12 w-full rounded-xl border text-center font-mono text-xl font-bold transition-all sm:h-14 sm:rounded-2xl sm:text-2xl outline-none ${
+                                digit
+                                  ? 'border-indigo-600 bg-indigo-50/40 text-indigo-950 shadow-sm'
+                                  : 'border-slate-200 bg-white text-slate-900 hover:border-slate-300'
+                              } focus:border-indigo-600 focus:bg-white focus:ring-4 focus:ring-indigo-100`}
+                              aria-label={`Digit ${index + 1} of 6`}
+                            />
+                          ))}
+                        </div>
 
-                        <p className="mt-2 text-left text-[11px] text-slate-400">
+                        <p className="mt-2.5 text-left text-[11px] text-slate-400">
                           Ask the host for the code to join their call.
                         </p>
                       </div>

@@ -1,7 +1,5 @@
-'use client';
-
 import { useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import Spinner from '@/components/Spinner';
 import ROUTES from '@/routes';
 
@@ -81,8 +79,8 @@ function BrowserIcon() {
   );
 }
 
-export default function LandingPage() {
-  const router = useRouter();
+export default function HomePage() {
+  const navigate = useNavigate();
 
   const [codeDigits, setCodeDigits] = useState<string[]>(['', '', '', '', '', '']);
   const code = codeDigits.join('');
@@ -180,16 +178,14 @@ export default function LandingPage() {
       }
 
       const data = await res.json();
-      router.push(ROUTES.ROOM(data.roomId, data.code));
+      navigate(ROUTES.ROOM(data.roomId, data.code));
     } catch {
       setError('Could not create room. Please check if the backend is running.');
       setLoading(false);
     }
   }
 
-  async function handleJoinWithCode(
-    e: React.FormEvent<HTMLFormElement>,
-  ) {
+  async function handleJoinWithCode(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const trimmed = code.replace(/\D/g, '');
@@ -203,16 +199,14 @@ export default function LandingPage() {
     setError('');
 
     try {
-      const res = await fetch(
-        ROUTES.API.GET_ROOM_BY_CODE(trimmed),
-      );
+      const res = await fetch(ROUTES.API.GET_ROOM_BY_CODE(trimmed));
 
       if (!res.ok) {
         throw new Error('Code not found');
       }
 
       const data = await res.json();
-      router.push(ROUTES.ROOM(data.roomId));
+      navigate(ROUTES.ROOM(data.roomId));
     } catch {
       setError('Code not found or expired. Please try again.');
       setJoining(false);
@@ -239,11 +233,7 @@ export default function LandingPage() {
         {/* Header */}
         <header className="flex items-center justify-between gap-3 py-4">
           <div className="flex min-w-0 items-center gap-2.5">
-            {/* <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-950 text-white shadow-sm sm:h-10 sm:w-10">
-              <GhostIcon className="h-5 w-5 text-white" />
-            </div> */}
-            <span className='shrink-0 rounded-2xl bg-indigo-700'>
-
+            <span className="shrink-0 rounded-2xl bg-indigo-700">
               <span className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/40 text-white ring-1 ring-white/100">
                 <GhostIcon className="h-11 w-11 text-gray-700 " />
               </span>
@@ -261,9 +251,7 @@ export default function LandingPage() {
           </div>
 
           <div className="shrink-0 whitespace-nowrap rounded-full border border-slate-200 bg-white px-2.5 py-1.5 text-[10px] font-medium text-slate-500 shadow-sm sm:px-3 sm:text-xs">
-            <span className="hidden sm:inline">
-              No signup required
-            </span>
+            <span className="hidden sm:inline">No signup required</span>
             <span className="sm:hidden">No signup</span>
           </div>
         </header>
@@ -277,7 +265,6 @@ export default function LandingPage() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-70" />
                 <span className="relative h-2 w-2 rounded-full bg-indigo-600" />
               </span>
-
               PRIVATE VIDEO CALLING
             </div>
 
@@ -290,8 +277,7 @@ export default function LandingPage() {
             </h2>
 
             <p className="mx-auto mt-3 max-w-[340px] text-sm leading-6 text-slate-600 sm:max-w-xl sm:text-base sm:leading-7 lg:text-lg">
-              Start a secure video call instantly. No account, no download,
-              and no unnecessary setup.
+              Start a secure video call instantly. No account, no download, and no unnecessary setup.
             </p>
 
             {/* Action card */}
@@ -306,7 +292,7 @@ export default function LandingPage() {
                         type="button"
                         onClick={handleStartCall}
                         disabled={loading}
-                        className="group relative flex min-h-[60px] w-full items-center justify-center gap-3 overflow-hidden rounded-2xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(79,70,229,0.25)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-700 hover:shadow-[0_14px_30px_rgba(79,70,229,0.32)] active:translate-y-0 active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-60"
+                        className="group relative flex min-h-[60px] w-full items-center justify-center gap-3 overflow-hidden rounded-2xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(79,70,229,0.25)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-700 hover:shadow-[0_14px_30px_rgba(79,70,229,0.32)] active:translate-y-0 active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
                       >
                         <span className="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
@@ -335,11 +321,9 @@ export default function LandingPage() {
                       {/* Divider */}
                       <div className="flex items-center gap-3 py-1">
                         <div className="h-px flex-1 bg-slate-200" />
-
                         <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-400">
                           or
                         </span>
-
                         <div className="h-px flex-1 bg-slate-200" />
                       </div>
 
@@ -348,7 +332,7 @@ export default function LandingPage() {
                         id="join-code-btn"
                         type="button"
                         onClick={openJoinForm}
-                        className="group flex min-h-[60px] w-full items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-200 hover:bg-indigo-50/50 hover:text-indigo-700 hover:shadow-md active:translate-y-0 active:scale-[0.985]"
+                        className="group flex min-h-[60px] w-full items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-200 hover:bg-indigo-50/50 hover:text-indigo-700 hover:shadow-md active:translate-y-0 active:scale-[0.985] cursor-pointer"
                       >
                         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-sm font-semibold text-slate-600 transition-colors group-hover:bg-indigo-100 group-hover:text-indigo-600">
                           #
@@ -368,16 +352,13 @@ export default function LandingPage() {
                       </p>
                     </div>
                   ) : (
-                    <form
-                      onSubmit={handleJoinWithCode}
-                      className="space-y-4"
-                    >
+                    <form onSubmit={handleJoinWithCode} className="space-y-4">
                       {/* Join form header */}
                       <div className="flex items-center justify-between">
                         <button
                           type="button"
                           onClick={resetJoinForm}
-                          className="min-h-10 px-1 text-xs font-semibold text-slate-500 transition-colors hover:text-slate-950"
+                          className="min-h-10 px-1 text-xs font-semibold text-slate-500 transition-colors hover:text-slate-950 cursor-pointer"
                         >
                           ← Back
                         </button>
@@ -433,7 +414,7 @@ export default function LandingPage() {
                         id="join-submit-btn"
                         type="submit"
                         disabled={joining || code.length !== 6}
-                        className="flex min-h-[60px] w-full items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-5 py-4 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(79,70,229,0.25)] transition-all hover:bg-indigo-700 active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex min-h-[60px] w-full items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-5 py-4 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(79,70,229,0.25)] transition-all hover:bg-indigo-700 active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                       >
                         {joining ? (
                           <>

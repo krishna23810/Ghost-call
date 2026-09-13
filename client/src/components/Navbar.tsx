@@ -1,6 +1,4 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import ROUTES from '@/routes';
 
 interface NavbarProps {
@@ -37,18 +35,17 @@ function GhostIcon({
 }
 
 export default function Navbar({ roomId, onInviteClick }: NavbarProps) {
-  const router = useRouter();
+  const navigate = useNavigate();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 h-16 px-4 sm:px-8 flex items-center justify-between bg-white/80 backdrop-blur-xl border-b border-slate-200/80 shadow-xs">
       {/* Brand & Status */}
       <div className="flex items-center gap-3">
         <button
-          onClick={() => router.push(ROUTES.HOME)}
+          onClick={() => navigate(ROUTES.HOME)}
           className="flex items-center gap-2.5 group cursor-pointer"
         >
           <span className='bg-indigo-700 rounded-2xl'>
-
             <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/40 text-white ring-1 ring-white/100">
               <GhostIcon className="h-8 w-8 text-gray-700 " />
             </span>

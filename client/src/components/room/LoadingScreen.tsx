@@ -1,5 +1,3 @@
-'use client';
-
 import { GhostIcon } from './Icons';
 
 export default function LoadingScreen() {
@@ -16,7 +14,7 @@ export default function LoadingScreen() {
         </p>
 
         <div className="mx-auto mt-5 h-1.5 w-40 overflow-hidden rounded-full bg-slate-200">
-          <div className="h-full w-1/3 animate-[loading_1.3s_ease-in-out_infinite] rounded-full bg-indigo-600" />
+          <div className="h-full w-1/3 animate-pulse rounded-full bg-indigo-600" />
         </div>
       </div>
     </main>

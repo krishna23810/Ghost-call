@@ -1,6 +1,3 @@
-
-'use client';
-
 import { useEffect, useState } from 'react';
 
 interface ShareModalProps {
@@ -40,17 +37,6 @@ function LinkIcon() {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden="true">
       <path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.5 4.5" />
       <path d="M14 11a5 5 0 0 0-7.07 0l-2.83 2.83a5 5 0 0 0 7.07 7.07L12.5 19.5" />
-    </svg>
-  );
-}
-
-function HashIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="h-4 w-4 shrink-0 text-slate-400" aria-hidden="true">
-      <path d="M10 3 8 21" />
-      <path d="m16 3-2 18" />
-      <path d="M4 9h17" />
-      <path d="M3 15h17" />
     </svg>
   );
 }

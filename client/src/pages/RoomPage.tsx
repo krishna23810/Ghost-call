@@ -1,7 +1,5 @@
-'use client';
-
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useParams, useSearchParams, useRouter } from 'next/navigation';
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { LiveKitRoom, RoomAudioRenderer } from '@livekit/components-react';
 
 import Navbar from '@/components/Navbar';
@@ -21,8 +19,8 @@ interface TokenData {
 
 export default function RoomPage() {
   const params = useParams();
-  const searchParams = useSearchParams();
-  const router = useRouter();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const roomId = (params.roomId as string)?.toUpperCase();
   const [roomCode, setRoomCode] = useState<string | null>(searchParams.get('code'));
@@ -38,6 +36,7 @@ export default function RoomPage() {
     typeof window !== 'undefined' ? `${window.location.origin}${ROUTES.SHARE_ROOM(roomId)}` : '';
 
   const fetchToken = useCallback(async () => {
+    if (!roomId) return;
     if (hasFetchedRef.current) return;
     hasFetchedRef.current = true;
 
@@ -82,7 +81,7 @@ export default function RoomPage() {
 
   if (state === 'error') {
     return (
-      <StatusScreen type="error" message={error} onAction={() => router.push(ROUTES.HOME)} />
+      <StatusScreen type="error" message={error} onAction={() => navigate(ROUTES.HOME)} />
     );
   }
 
@@ -91,7 +90,7 @@ export default function RoomPage() {
       <StatusScreen
         type="ended"
         message="You have disconnected. No call data or messages were saved."
-        onAction={() => router.push(ROUTES.HOME)}
+        onAction={() => navigate(ROUTES.HOME)}
       />
     );
   }

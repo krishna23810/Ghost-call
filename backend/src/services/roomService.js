@@ -25,6 +25,12 @@ async function createRoom(roomId, code) {
   await redis.set(`room:${roomId}`, JSON.stringify(room), { ex: ROOM_TTL });
   // Store code -> roomId mapping
   await redis.set(`code:${code}`, roomId, { ex: ROOM_TTL });
+  // Track in active rooms set
+  try {
+    await redis.sadd('active_room_ids', roomId);
+  } catch (e) {
+    console.warn('Redis sadd warning:', e.message);
+  }
 
   return room;
 }
@@ -52,9 +58,70 @@ async function getRoomByCode(code) {
  */
 async function deleteRoom(roomId) {
   const room = await getRoomById(roomId);
-  if (!room) return;
+  if (room) {
+    await redis.del(`code:${room.code}`);
+  }
   await redis.del(`room:${roomId}`);
-  await redis.del(`code:${room.code}`);
+  try {
+    await redis.srem('active_room_ids', roomId);
+  } catch (e) {
+    console.warn('Redis srem warning:', e.message);
+  }
 }
 
-module.exports = { createRoom, getRoomById, getRoomByCode, deleteRoom };
+/**
+ * Get all tracked active rooms from Redis
+ */
+async function getAllRooms() {
+  try {
+    const allIds = new Set();
+
+    // 1. Fetch all room keys directly from Redis (matches room:*)
+    try {
+      const keys = await redis.keys('room:*');
+      if (Array.isArray(keys)) {
+        keys.forEach((k) => {
+          if (typeof k === 'string' && k.startsWith('room:')) {
+            allIds.add(k.slice(5));
+          }
+        });
+      }
+    } catch (e) {
+      console.warn('Redis keys scan warning:', e.message);
+    }
+
+    // 2. Also check active_room_ids set
+    try {
+      const setIds = await redis.smembers('active_room_ids');
+      if (Array.isArray(setIds)) {
+        setIds.forEach((id) => allIds.add(id));
+      }
+    } catch (e) {
+      console.warn('Redis smembers warning:', e.message);
+    }
+
+    if (allIds.size === 0) return [];
+
+    const rooms = [];
+    for (const id of allIds) {
+      const room = await getRoomById(id);
+      if (room) {
+        rooms.push(room);
+        // Ensure active_room_ids set has it
+        await redis.sadd('active_room_ids', id).catch(() => {});
+      } else {
+        // Room expired by TTL, prune from set
+        await redis.srem('active_room_ids', id).catch(() => {});
+      }
+    }
+
+    // Sort newest first
+    rooms.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    return rooms;
+  } catch (err) {
+    console.error('Error fetching all rooms from Redis:', err.message);
+    return [];
+  }
+}
+
+module.exports = { createRoom, getRoomById, getRoomByCode, deleteRoom, getAllRooms };

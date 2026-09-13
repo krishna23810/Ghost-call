@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useEffect, useRef } from 'react';
 import { useChat } from '@livekit/components-react';
 import { ChatBubbleIcon, CloseIcon, SendIcon } from './Icons';

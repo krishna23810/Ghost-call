@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { VideoTrack, TrackReferenceOrPlaceholder } from '@livekit/components-react';
 import { MoveIcon, GhostIcon } from './Icons';
@@ -122,13 +120,15 @@ export default function DraggableSelfView({ trackRef }: DraggableSelfViewProps) 
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       onClick={triggerShowControls}
-      className={`group fixed z-50 select-none overflow-hidden rounded-2xl border border-indigo-500/80 bg-slate-950 shadow-2xl shadow-slate-900/60 transition-[width,height] duration-200 touch-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'
-        } ${sizeClasses[viewSize]}`}
+      className={`group fixed z-50 select-none overflow-hidden rounded-2xl border border-indigo-500/80 bg-slate-950 shadow-2xl shadow-slate-900/60 transition-[width,height] duration-200 touch-none ${
+        isDragging ? 'cursor-grabbing' : 'cursor-grab'
+      } ${sizeClasses[viewSize]}`}
     >
       {/* Top Drag + Size Controls Bar */}
       <div
-        className={`absolute inset-x-2 top-2 z-30 flex items-center justify-between transition-opacity duration-300 ${showControls ? 'opacity-100' : 'opacity-0 sm:group-hover:opacity-100'
-          }`}
+        className={`absolute inset-x-2 top-2 z-30 flex items-center justify-between transition-opacity duration-300 ${
+          showControls ? 'opacity-100' : 'opacity-0 sm:group-hover:opacity-100'
+        }`}
       >
         <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-900/85 text-white/90 backdrop-blur-md border border-white/15 shadow-sm">
           <MoveIcon />
@@ -155,10 +155,11 @@ export default function DraggableSelfView({ trackRef }: DraggableSelfViewProps) 
                 setViewSize(sz);
                 triggerShowControls();
               }}
-              className={`flex h-4.5 w-4.5 items-center justify-center rounded-full text-[9px] font-extrabold uppercase transition-all cursor-pointer ${viewSize === sz
-                ? 'bg-indigo-600 text-white shadow-xs'
-                : 'text-slate-300 hover:text-white hover:bg-white/20'
-                }`}
+              className={`flex h-4.5 w-4.5 items-center justify-center rounded-full text-[9px] font-extrabold uppercase transition-all cursor-pointer ${
+                viewSize === sz
+                  ? 'bg-indigo-600 text-white shadow-xs'
+                  : 'text-slate-300 hover:text-white hover:bg-white/20'
+              }`}
             >
               {sz[0]}
             </button>

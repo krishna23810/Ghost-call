@@ -1,8 +1,0 @@
-@import "tailwindcss";
-
-/* ── Ghost Call Platform — Base Global Styles ─────────────────── */
-@layer base {
-  body {
-    @apply bg-slate-50 text-slate-900 min-h-screen antialiased overflow-x-hidden selection:bg-indigo-500 selection:text-white;
-  }
-}

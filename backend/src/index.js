@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
 const roomRoutes = require('./routes/rooms');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -51,6 +52,7 @@ app.use('/api', limiter);
 
 // ── Routes ───────────────────────────────────────────────────
 app.use('/api/rooms', roomRoutes);
+app.use('/api/admin', adminRoutes);
 
 // ── Health check ─────────────────────────────────────────────
 app.get('/health', (req, res) => {

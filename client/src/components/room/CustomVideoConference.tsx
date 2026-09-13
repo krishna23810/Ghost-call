@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useEffect } from 'react';
 import { useLocalParticipant, useTracks, useRoomContext } from '@livekit/components-react';
 import { Track, RoomEvent } from 'livekit-client';

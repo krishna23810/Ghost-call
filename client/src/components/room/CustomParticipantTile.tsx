@@ -1,5 +1,3 @@
-'use client';
-
 import { VideoTrack, TrackReferenceOrPlaceholder } from '@livekit/components-react';
 import { GhostIcon } from './Icons';
 

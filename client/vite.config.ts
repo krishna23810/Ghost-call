@@ -47,6 +47,11 @@ export default defineConfig({
     port: 3000,
     allowedHosts: true,
     proxy: {
+      '/Ghost-call/api': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/Ghost-call/, ''),
+      },
       '/api': {
         target: 'http://localhost:4000',
         changeOrigin: true,
@@ -57,5 +62,16 @@ export default defineConfig({
     port: 3000,
     host: '0.0.0.0',
     allowedHosts: true,
+    proxy: {
+      '/Ghost-call/api': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/Ghost-call/, ''),
+      },
+      '/api': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+      },
+    },
   },
 });

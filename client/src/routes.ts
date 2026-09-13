@@ -1,27 +1,15 @@
-/**
- * Ghost Call — Route Definitions
- * Simple, human-readable route paths for client navigation and API endpoints.
- */
-
-const isBrowser = typeof window !== 'undefined';
-const pathPrefix = isBrowser && /^\/ghost-call/i.test(window.location.pathname)
-  ? (window.location.pathname.match(/^\/[^/]+/)?.[0] || '/Ghost-call')
-  : '';
-const API_BASE = `${pathPrefix}/api`;
+// Uses VITE_API_URL from .env:
+const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
+const BASE_PATH = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 
 export const ROUTES = {
-  // Client Pages
   HOME: '/',
-  ROOM: (roomId: string, code?: string) =>
-    `/room/${roomId}${code ? `?code=${code}` : ''}`,
+  ROOM: (roomId: string, code?: string) => `/room/${roomId}${code ? `?code=${code}` : ''}`,
   SHARE_ROOM: (roomId: string, code?: string) =>
-    typeof window !== 'undefined'
-      ? `${window.location.origin}${window.location.pathname.startsWith('/Ghost-call') ? '/Ghost-call' : ''}/room/${roomId}${code ? `?code=${code}` : ''}`
-      : `/room/${roomId}${code ? `?code=${code}` : ''}`,
+    `${BASE_PATH}/room/${roomId}${code ? `?code=${code}` : ''}`,
   ADMIN: '/admin',
   ADMIN_DATA: '/admin/data',
 
-  // Backend API Endpoints (proxied via Vite -> http://localhost:4000/api)
   API: {
     CREATE_ROOM: `${API_BASE}/rooms`,
     GET_ROOM_BY_ID: (roomId: string) => `${API_BASE}/rooms/${roomId}`,

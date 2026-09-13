@@ -21,7 +21,7 @@ export default function DraggableSelfView({ trackRef }: DraggableSelfViewProps) 
   const [showControls, setShowControls] = useState(false);
 
   const dragRef = useRef({ startX: 0, startY: 0, initialX: 20, initialY: 88 });
-  const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const triggerShowControls = useCallback(() => {
     setShowControls(true);

@@ -5,9 +5,10 @@ import '@livekit/components-styles';
 import App from './App';
 import './index.css';
 
-// Automatically detect /Ghost-call base path in production on kktechsolution.app
-const basename = /^\/ghost-call/i.test(window.location.pathname)
-  ? (window.location.pathname.match(/^\/[^/]+/)?.[0] || '/Ghost-call')
+// Detect base path from Vite configured BASE_URL with root fallback
+const configuredBase = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+const basename = window.location.pathname.toLowerCase().startsWith(configuredBase.toLowerCase())
+  ? configuredBase
   : '/';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

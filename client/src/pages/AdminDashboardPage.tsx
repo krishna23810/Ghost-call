@@ -208,7 +208,7 @@ export default function AdminDashboardPage() {
   // Copy Feedback state
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  const countdownTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const countdownTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Copy to clipboard helper
   function copyText(text: string, id: string) {

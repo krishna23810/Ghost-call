@@ -158,19 +158,19 @@ export default function LandingPage() {
     <main className="min-h-dvh overflow-x-hidden bg-[#f8f9fc] text-slate-900">
       <div className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col px-4 pb-[env(safe-area-inset-bottom)] sm:px-6 lg:px-8">
         {/* Header */}
-        <header className="flex items-center justify-between py-4">
-          <div className="flex items-center gap-2.5">
+        <header className="flex items-center justify-between gap-3 py-4">
+          <div className="flex min-w-0 items-center gap-2.5">
             {/* <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-950 text-white shadow-sm sm:h-10 sm:w-10">
               <GhostIcon className="h-5 w-5 text-white" />
             </div> */}
-            <span className='bg-indigo-700 rounded-2xl'>
+            <span className='shrink-0 rounded-2xl bg-indigo-700'>
 
               <span className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/40 text-white ring-1 ring-white/100">
                 <GhostIcon className="h-11 w-11 text-gray-700 " />
               </span>
             </span>
 
-            <div>
+            <div className="min-w-0">
               <h1 className="text-sm font-semibold tracking-tight text-slate-950 sm:text-base">
                 Ghost Call
               </h1>
@@ -181,7 +181,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="rounded-full border border-slate-200 bg-white px-2.5 py-1.5 text-[10px] font-medium text-slate-500 shadow-sm sm:px-3 sm:text-xs">
+          <div className="shrink-0 whitespace-nowrap rounded-full border border-slate-200 bg-white px-2.5 py-1.5 text-[10px] font-medium text-slate-500 shadow-sm sm:px-3 sm:text-xs">
             <span className="hidden sm:inline">
               No signup required
             </span>

@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
 export default defineConfig({
+  base: '/Ghost-call/',
   plugins: [
     react(),
     tailwindcss(),
@@ -21,5 +22,9 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+  },
+  preview: {
+    port: 3000,
+    host: '0.0.0.0',
   },
 });

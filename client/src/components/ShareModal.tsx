@@ -136,7 +136,7 @@ export default function ShareModal({ roomId, shareCode, joinLink, onClose }: Sha
               </div>
 
               <div>
-                <h3 id="share-modal-title" className="text-lg font-bold tracking-tight text-slate-950 sm:text-base">
+                <h3 id="share-modal-title" className="text-lg font-semibold tracking-tight text-slate-950 sm:text-base">
                   Invite to call
                 </h3>
                 <p className="text-xs font-medium text-slate-500">

@@ -50,7 +50,7 @@ export default function Navbar({ roomId, onInviteClick }: NavbarProps) {
               <GhostIcon className="h-8 w-8 text-gray-700 " />
             </span>
           </span>
-          <span className="font-extrabold text-lg sm:text-xl tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">
+          <span className="font-semibold text-lg sm:text-xl tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">
             Ghost Call
           </span>
         </button>
